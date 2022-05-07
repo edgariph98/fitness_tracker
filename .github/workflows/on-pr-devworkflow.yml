@@ -54,8 +54,10 @@ jobs:
         go-version: '^1.13.8' # The Go version to download (if necessary) and use.
     # Installing go module
     - name: Installing Go Modules
+      working-directory: ${{env.sourceBackendProject}}
       run: go install
     # running go build
     - name: Running Go app Build
+      working-directory: ${{env.sourceBackendProject}}
       run: go build
     
