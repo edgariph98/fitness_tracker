@@ -12,7 +12,6 @@ on:
 
 # A workflow to run both backend and front end builds of the repositoy
 jobs:
-
   # Front end build with Next/React
   FronteEndBuild:
     name: Front End Next/React Build and Test
@@ -32,11 +31,31 @@ jobs:
         working-directory: ${{env.sourceFrontendProject}}
         run: npm install
       # npm install
-      - name: Running Build
+      - name: Running Next Build
         working-directory: ${{env.sourceFrontendProject}}
         run: npm run build
       # npm test
       - name: Running Unit tests
         working-directory: ${{env.sourceFrontendProject}}
         run: npm run test
-
+  # Backend Build Steps
+  BackendBuild:
+    env:
+      sourceBackendProject: ./src/go-backend
+    runs-on: ubuntu-latest
+    steps:
+    # checking out code
+    - uses: actions/checkout@v3
+      name: checking our code on Branch
+    # Installing go
+    - uses: actions/setup-go@v3
+      name: Setup Go
+      with:
+        go-version: '^1.13.8' # The Go version to download (if necessary) and use.
+    # Installing go module
+    - name: Installing Go Modules
+      run: go install
+    # running go build
+    - name: Running Go app Build
+      run: go build
+    
