@@ -32,13 +32,16 @@ jobs:
     name: Front End Next/React Build
     runs-on: ubuntu-latest
     needs: Setup
+    
     # Steps for frontend build
     steps:
       # npm install
       - name: Installing npm packages
+        working-directory: ${{env.sourceFrontendProject}}
         run: npm install
       # npm install
       - name: Running Build
+        working-directory: ${{env.sourceFrontendProject}}
         run: npm run build
   
   # Front end testing with Next/React/Jest and Hopefully UI testing
@@ -49,5 +52,6 @@ jobs:
     # Steps for frontend build
     steps:
       - name: Testting Unit tests
+        working-directory: ${{env.sourceFrontendProject}}
         run: npm run test
-    
+
