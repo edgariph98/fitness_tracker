@@ -12,12 +12,14 @@ on:
 
 # A workflow to run both backend and front end builds of the repositoy
 jobs:
-  Setup:
+
+  # Front end build with Next/React
+  FronteEndBuild:
+    name: Front End Next/React Build and Test
     env:
       sourceFrontendProject: ./src/next-react-frontend
-      sourceBackendProject: ./src/go-back-end
     runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # Steps for frontend build
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
@@ -25,32 +27,16 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-
-  # Front end build with Next/React
-  FronteEndBuild:
-    name: Front End Next/React Build
-    runs-on: ubuntu-latest
-    needs: Setup
-    
-    # Steps for frontend build
-    steps:
       # npm install
       - name: Installing npm packages
-        working-directory: src/next-react-frontend
+        working-directory: ${{env.sourceFrontendProject}}
         run: npm install
       # npm install
       - name: Running Build
-        working-directory: src/next-react-frontend
+        working-directory: ${{env.sourceFrontendProject}}
         run: npm run build
-  
-  # Front end testing with Next/React/Jest and Hopefully UI testing
-  FrontendTesting:
-    name: Front End Next/React Testing
-    runs-on: ubuntu-latest
-    needs: FronteEndBuild
-    # Steps for frontend build
-    steps:
-      - name: Testting Unit tests
+      # npm test
+      - name: Running Unit tests
         working-directory: ${{env.sourceFrontendProject}}
         run: npm run test
 
