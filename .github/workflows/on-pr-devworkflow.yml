@@ -10,24 +10,44 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# A workflow to run both backend and front end builds of the repositoy
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  Setup:
+    env:
+      sourceFrontendProject: ./src/next-react-frontend
+      sourceBackendProject: ./src/go-back-end
     runs-on: ubuntu-latest
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+        name: checking our code on Branch ${GITHUB_REF##*/}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+  # Front end build with Next/React
+  FronteEndBuild:
+    name: Front End Next/React Build
+    runs-on: ubuntu-latest
+    needs: Setup
+    # Steps for frontend build
+    steps:
+      # npm install
+      - name: Installing npm packages
+        run: npm install
+      # npm install
+      - name: Running Build
+        run: npm run build
+  
+  # Front end testing with Next/React/Jest and Hopefully UI testing
+  FrontendTesting:
+    name: Front End Next/React Testing
+    runs-on: ubuntu-latest
+    needs: FronteEndBuild
+    # Steps for frontend build
+    steps:
+      - name: Testting Unit tests
+        run: npm run test
+    
