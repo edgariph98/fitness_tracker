@@ -21,11 +21,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-        name: checking our code on Branch ${GITHUB_REF##*/}
+        name: checking our code on Branch ${{GITHUB_REF##*/}}
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'npm'
 
   # Front end build with Next/React
   FronteEndBuild:
