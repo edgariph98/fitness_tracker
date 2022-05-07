@@ -36,11 +36,11 @@ jobs:
     steps:
       # npm install
       - name: Installing npm packages
-        working-directory: ./src/next-react-frontend
+        working-directory: src/next-react-frontend
         run: npm install
       # npm install
       - name: Running Build
-        working-directory: ./src/next-react-frontend
+        working-directory: src/next-react-frontend
         run: npm run build
   
   # Front end testing with Next/React/Jest and Hopefully UI testing
