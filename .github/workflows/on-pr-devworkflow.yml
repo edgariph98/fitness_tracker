@@ -1,0 +1,64 @@
+# This is a basic workflow to help you get started with Actions
+
+name: On-Dev-Pr-Wrokflow
+
+# Controls when the workflow will run
+on:
+  pull_request:
+    branches: [ dev ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow to run both backend and front end builds of the repositoy
+jobs:
+  # Front end build with Next/React
+  FronteEndBuild:
+    name: Front End Next/React Build and Test
+    env:
+      sourceFrontendProject: ./src/next-react-frontend
+    runs-on: ubuntu-latest
+    # Steps for frontend build
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+        name: checking our code on Branch
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      # npm install
+      - name: Installing npm packages
+        working-directory: ${{env.sourceFrontendProject}}
+        run: npm install
+      # npm install
+      - name: Running Next Build
+        working-directory: ${{env.sourceFrontendProject}}
+        run: npm run build
+      # npm test
+      - name: Running Unit tests
+        working-directory: ${{env.sourceFrontendProject}}
+        run: npm run test
+  # Backend Build Steps
+  BackendBuild:
+    name: Backend Go Build
+    env:
+      sourceBackendProject: ./src/go-backend
+    runs-on: ubuntu-latest
+    steps:
+    # checking out code
+    - uses: actions/checkout@v3
+      name: checking our code on Branch
+    # Installing go
+    - uses: actions/setup-go@v3
+      name: Setup Go
+      with:
+        go-version: '^1.13.8' # The Go version to download (if necessary) and use.
+    # Installing go module
+    - name: Installing Go Modules
+      working-directory: ${{env.sourceBackendProject}}
+      run: go install
+    # running go build
+    - name: Running Go app Build
+      working-directory: ${{env.sourceBackendProject}}
+      run: go build
+    
