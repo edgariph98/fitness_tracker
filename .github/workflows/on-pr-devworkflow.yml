@@ -14,9 +14,9 @@ on:
 jobs:
   # Front end build with Next/React
   FronteEndBuild:
-    name: Front End Next/React Build and Test
+    name: Front End React Build and Test
     env:
-      sourceFrontendProject: ./src/next-react-frontend
+      sourceFrontendProject: ./src/form-tracker-frontend
     runs-on: ubuntu-latest
     # Steps for frontend build
     steps:
@@ -31,7 +31,7 @@ jobs:
         working-directory: ${{env.sourceFrontendProject}}
         run: npm install
       # npm install
-      - name: Running Next Build
+      - name: Running React Build
         working-directory: ${{env.sourceFrontendProject}}
         run: npm run build
       # npm test
